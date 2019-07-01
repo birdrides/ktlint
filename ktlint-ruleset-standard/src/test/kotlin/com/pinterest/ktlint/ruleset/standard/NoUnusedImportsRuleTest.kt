@@ -8,11 +8,11 @@ import org.junit.Test
 
 class NoUnusedImportsRuleTest {
 
-    @Test
-    fun testLint() {
-        assertThat(
-            NoUnusedImportsRule().lint(
-                """
+  @Test
+  fun testLint() {
+    assertThat(
+      NoUnusedImportsRule().lint(
+        """
                 import p.a
                 import p.B6
                 import java.nio.file.Paths
@@ -31,33 +31,33 @@ class NoUnusedImportsRuleTest {
                     `when`()
                 }
                 """.trimIndent()
-            )
-        ).isEqualTo(
-            listOf(
-                LintError(2, 1, "no-unused-imports", "Unused import"),
-                LintError(3, 1, "no-unused-imports", "Unused import"),
-                LintError(4, 1, "no-unused-imports", "Unused import"),
-                LintError(9, 1, "no-unused-imports", "Unused import")
-            )
-        )
-        assertThat(
-            NoUnusedImportsRule().lint(
-                """
+      )
+    ).isEqualTo(
+      listOf(
+        LintError(2, 1, "no-unused-imports", "Unused import"),
+        LintError(3, 1, "no-unused-imports", "Unused import"),
+        LintError(4, 1, "no-unused-imports", "Unused import"),
+        LintError(9, 1, "no-unused-imports", "Unused import")
+      )
+    )
+    assertThat(
+      NoUnusedImportsRule().lint(
+        """
                 import rx.lang.kotlin.plusAssign
 
                 fun main() {
                     v += 1
                 }
                 """.trimIndent()
-            )
-        ).isEmpty()
-    }
+      )
+    ).isEmpty()
+  }
 
-    @Test
-    fun testLintIssue204() {
-        assertThat(
-            NoUnusedImportsRule().lint(
-                """
+  @Test
+  fun testLintIssue204() {
+    assertThat(
+      NoUnusedImportsRule().lint(
+        """
                 package com.example.another
 
                 import com.example.anotherThing
@@ -66,26 +66,26 @@ class NoUnusedImportsRuleTest {
                     val bar = anotherThing
                 }
                 """.trimIndent()
-            )
-        ).isEmpty()
-    }
+      )
+    ).isEmpty()
+  }
 
-    @Test
-    fun testLintDestructuringAssignment() {
-        assertThat(
-            NoUnusedImportsRule().lint(
-                """
+  @Test
+  fun testLintDestructuringAssignment() {
+    assertThat(
+      NoUnusedImportsRule().lint(
+        """
                 import p.component6
 
                 fun main() {
                     val (one, two, three, four, five, six) = someList
                 }
                 """.trimIndent()
-            )
-        ).isEmpty()
-        assertThat(
-            NoUnusedImportsRule().lint(
-                """
+      )
+    ).isEmpty()
+    assertThat(
+      NoUnusedImportsRule().lint(
+        """
                 import p.component6
                 import p.component2
                 import p.component100
@@ -96,20 +96,20 @@ class NoUnusedImportsRuleTest {
                     val (one, two, three, four, five, six) = someList
                 }
                 """.trimIndent()
-            )
-        ).isEqualTo(
-            listOf(
-                LintError(4, 1, "no-unused-imports", "Unused import"),
-                LintError(5, 1, "no-unused-imports", "Unused import")
-            )
-        )
-    }
+      )
+    ).isEqualTo(
+      listOf(
+        LintError(4, 1, "no-unused-imports", "Unused import"),
+        LintError(5, 1, "no-unused-imports", "Unused import")
+      )
+    )
+  }
 
-    @Test
-    fun testLintKDocLinkImport() {
-        assertThat(
-            NoUnusedImportsRule().lint(
-                """
+  @Test
+  fun testLintKDocLinkImport() {
+    assertThat(
+      NoUnusedImportsRule().lint(
+        """
                 package kdoc
 
                 import DRef
@@ -131,25 +131,25 @@ class NoUnusedImportsRuleTest {
                  */
                 fun main() {}
                 """.trimIndent()
-            )
-        ).isEqualTo(
-            listOf(
-                LintError(4, 1, "no-unused-imports", "Unused import"),
-                LintError(5, 1, "no-unused-imports", "Unused import"),
-                LintError(6, 1, "no-unused-imports", "Unused import"),
-                LintError(7, 1, "no-unused-imports", "Unused import"),
-                LintError(8, 1, "no-unused-imports", "Unused import"),
-                LintError(9, 1, "no-unused-imports", "Unused import"),
-                LintError(10, 1, "no-unused-imports", "Unused import")
-            )
-        )
-    }
+      )
+    ).isEqualTo(
+      listOf(
+        LintError(4, 1, "no-unused-imports", "Unused import"),
+        LintError(5, 1, "no-unused-imports", "Unused import"),
+        LintError(6, 1, "no-unused-imports", "Unused import"),
+        LintError(7, 1, "no-unused-imports", "Unused import"),
+        LintError(8, 1, "no-unused-imports", "Unused import"),
+        LintError(9, 1, "no-unused-imports", "Unused import"),
+        LintError(10, 1, "no-unused-imports", "Unused import")
+      )
+    )
+  }
 
-    @Test
-    fun testSamePackageImport() {
-        assertThat(
-            NoUnusedImportsRule().lint(
-                """
+  @Test
+  fun testSamePackageImport() {
+    assertThat(
+      NoUnusedImportsRule().lint(
+        """
 
 
                 import C1
@@ -162,16 +162,16 @@ class NoUnusedImportsRuleTest {
                     println(C1, C1X, C2, C2X, method)
                 }
                 """.trimIndent()
-            )
-        ).isEqualTo(
-            listOf(
-                LintError(3, 1, "no-unused-imports", "Unnecessary import"),
-                LintError(5, 1, "no-unused-imports", "Unnecessary import")
-            )
-        )
-        assertThat(
-            NoUnusedImportsRule().lint(
-                """
+      )
+    ).isEqualTo(
+      listOf(
+        LintError(3, 1, "no-unused-imports", "Unnecessary import"),
+        LintError(5, 1, "no-unused-imports", "Unnecessary import")
+      )
+    )
+    assertThat(
+      NoUnusedImportsRule().lint(
+        """
                 package p
 
                 import p.C1
@@ -184,20 +184,20 @@ class NoUnusedImportsRuleTest {
                     println(C1, C1X, C2, C2X, method)
                 }
                 """.trimIndent()
-            )
-        ).isEqualTo(
-            listOf(
-                LintError(3, 1, "no-unused-imports", "Unnecessary import"),
-                LintError(5, 1, "no-unused-imports", "Unnecessary import")
-            )
-        )
-    }
+      )
+    ).isEqualTo(
+      listOf(
+        LintError(3, 1, "no-unused-imports", "Unnecessary import"),
+        LintError(5, 1, "no-unused-imports", "Unnecessary import")
+      )
+    )
+  }
 
-    @Test
-    fun testFormat() {
-        assertThat(
-            NoUnusedImportsRule().format(
-                """
+  @Test
+  fun testFormat() {
+    assertThat(
+      NoUnusedImportsRule().format(
+        """
                 import p.a
                 import p.B6
                 import p.B as B12
@@ -213,9 +213,9 @@ class NoUnusedImportsRuleTest {
                     `when`()
                 }
                 """.trimIndent()
-            )
-        ).isEqualTo(
-            """
+      )
+    ).isEqualTo(
+      """
             import p.a
             import p2.B as B2
             import p.C
@@ -228,14 +228,14 @@ class NoUnusedImportsRuleTest {
                 `when`()
             }
             """.trimIndent()
-        )
-    }
+    )
+  }
 
-    @Test
-    fun testFormatKDocLinkImport() {
-        assertThat(
-            NoUnusedImportsRule().format(
-                """
+  @Test
+  fun testFormatKDocLinkImport() {
+    assertThat(
+      NoUnusedImportsRule().format(
+        """
                 package kdoc
 
                 import DRef
@@ -254,9 +254,9 @@ class NoUnusedImportsRuleTest {
                  */
                 fun main() {}
                 """.trimIndent()
-            )
-        ).isEqualTo(
-            """
+      )
+    ).isEqualTo(
+      """
             package kdoc
 
             import DRef
@@ -268,33 +268,33 @@ class NoUnusedImportsRuleTest {
              */
             fun main() {}
             """.trimIndent()
-        )
-    }
+    )
+  }
 
-    @Test
-    fun testParentPackImport() {
-        assertThat(
-            NoUnusedImportsRule().lint(
-                """
+  @Test
+  fun testParentPackImport() {
+    assertThat(
+      NoUnusedImportsRule().lint(
+        """
                 import org.mockito.Mockito
                 import org.mockito.Mockito.withSettings
                 fun foo() {
                         Mockito.mock(String::class.java, Mockito.withSettings().defaultAnswer {  })
                     }
                 """.trimIndent()
-            )
-        ).isEqualTo(
-            listOf(
-                LintError(2, 1, "no-unused-imports", "Unused import")
-            )
-        )
-    }
+      )
+    ).isEqualTo(
+      listOf(
+        LintError(2, 1, "no-unused-imports", "Unused import")
+      )
+    )
+  }
 
-    @Test
-    fun testParentPackImportWithPackageNamePresent() {
-        assertThat(
-            NoUnusedImportsRule().lint(
-                """
+  @Test
+  fun testParentPackImportWithPackageNamePresent() {
+    assertThat(
+      NoUnusedImportsRule().lint(
+        """
                 package org.tw.project
                 import org.mockito.Mockito
                 import org.mockito.Mockito.withSettings
@@ -302,19 +302,19 @@ class NoUnusedImportsRuleTest {
                         Mockito.mock(String::class.java, Mockito.withSettings().defaultAnswer {  })
                     }
                 """.trimIndent()
-            )
-        ).isEqualTo(
-            listOf(
-                LintError(3, 1, "no-unused-imports", "Unused import")
-            )
-        )
-    }
+      )
+    ).isEqualTo(
+      listOf(
+        LintError(3, 1, "no-unused-imports", "Unused import")
+      )
+    )
+  }
 
-    @Test
-    fun testParentPackImportWithImportNameHavingNoParentImport() {
-        assertThat(
-            NoUnusedImportsRule().lint(
-                """
+  @Test
+  fun testParentPackImportWithImportNameHavingNoParentImport() {
+    assertThat(
+      NoUnusedImportsRule().lint(
+        """
                 import org.assertj.core.util.diff.DiffUtils.diff
                 import org.assertj.core.util.diff.DiffUtils.generateUnifiedDiff
                 fun foo() {
@@ -322,15 +322,15 @@ class NoUnusedImportsRuleTest {
                 val diff = generateUnifiedDiff(1)
                 }
                 """.trimIndent()
-            )
-        ).isEmpty()
-    }
+      )
+    ).isEmpty()
+  }
 
-    @Test
-    fun testParentImportWithStaticVariable() {
-        assertThat(
-            NoUnusedImportsRule().lint(
-                """
+  @Test
+  fun testParentImportWithStaticVariable() {
+    assertThat(
+      NoUnusedImportsRule().lint(
+        """
                 import org.repository.RepositoryPolicy
                 import org.repository.RepositoryPolicy.CHECKSUM_POLICY_IGNORE
                 fun main() {
@@ -340,34 +340,34 @@ class NoUnusedImportsRuleTest {
                     )
                 }
                 """.trimIndent()
-            )
-        ).isEmpty()
-    }
+      )
+    ).isEmpty()
+  }
 
-    @Test
-    fun testParentImportWithStaticVariableImportAndParentImportUnused() {
-        assertThat(
-            NoUnusedImportsRule().lint(
-                """
+  @Test
+  fun testParentImportWithStaticVariableImportAndParentImportUnused() {
+    assertThat(
+      NoUnusedImportsRule().lint(
+        """
                 import org.repository.RepositoryPolicy
                 import org.repository.RepositoryPolicy.CHECKSUM_POLICY_IGNORE
                 fun main() {
                        val a = CHECKSUM_POLICY_IGNORE
                 }
                 """.trimIndent()
-            )
-        ).isEqualTo(
-            listOf(
-                LintError(1, 1, "no-unused-imports", "Unused import")
-            )
-        )
-    }
+      )
+    ).isEqualTo(
+      listOf(
+        LintError(1, 1, "no-unused-imports", "Unused import")
+      )
+    )
+  }
 
-    @Test
-    fun testFormatWhenParentImportWithStaticVariableAndMethod() {
-        assertThat(
-            NoUnusedImportsRule().format(
-                """
+  @Test
+  fun testFormatWhenParentImportWithStaticVariableAndMethod() {
+    assertThat(
+      NoUnusedImportsRule().format(
+        """
                 package org.tw.project
                 import org.repository.RepositoryPolicy
                 import org.repository.RepositoryPolicy.CHECKSUM_POLICY_IGNORE
@@ -380,9 +380,9 @@ class NoUnusedImportsRuleTest {
                        val a = CHECKSUM_POLICY_IGNORE
                 }
                 """.trimIndent()
-            )
-        ).isEqualTo(
-            """
+      )
+    ).isEqualTo(
+      """
             package org.tw.project
             import org.repository.RepositoryPolicy.CHECKSUM_POLICY_IGNORE
             import org.mockito.Mockito
@@ -393,6 +393,6 @@ class NoUnusedImportsRuleTest {
                    val a = CHECKSUM_POLICY_IGNORE
             }
             """.trimIndent()
-        )
-    }
+    )
+  }
 }

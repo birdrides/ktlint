@@ -30,7 +30,7 @@ ext.deps = [
   // Required by aether
   'guava'         : 'com.google.guava:guava:18.0',
   // Used to silence aether-transport-http
-  'slf4j'          : 'org.slf4j:slf4j-nop:1.6.2',
+  'slf4j'         : 'org.slf4j:slf4j-nop:1.6.2',
   'aetherProvider': 'org.apache.maven:maven-aether-provider:3.2.5',
   'picocli'       : 'info.picocli:picocli:3.9.6',
   // Testing libraries
@@ -67,7 +67,7 @@ allprojects {
   tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
-    
+
     kotlinOptions {
       jvmTarget = '1.8'
     }

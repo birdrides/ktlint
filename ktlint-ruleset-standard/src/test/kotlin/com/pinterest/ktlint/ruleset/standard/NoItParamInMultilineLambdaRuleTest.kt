@@ -6,12 +6,12 @@ import org.junit.Test
 
 class NoItParamInMultilineLambdaRuleTest {
 
-    @Test
-    fun testLint() {
-        assertThat(
-            NoItParamInMultilineLambdaRule().diffFileLint(
-                "spec/no-it-in-multiline-lambda/lint.kt.spec"
-            )
-        ).isEmpty()
-    }
+  @Test
+  fun testLint() {
+    assertThat(
+      NoItParamInMultilineLambdaRule().diffFileLint(
+        "spec/no-it-in-multiline-lambda/lint.kt.spec"
+      )
+    ).isEmpty()
+  }
 }

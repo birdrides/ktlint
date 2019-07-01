@@ -11,17 +11,17 @@ import org.jetbrains.kotlin.psi.KtPackageDirective
  */
 class PackageNameRule : Rule("package-name") {
 
-    override fun visit(
-        node: ASTNode,
-        autoCorrect: Boolean,
-        emit: (offset: Int, errorMessage: String, canBeAutoCorrected: Boolean) -> Unit
-    ) {
-        if (node.elementType == PACKAGE_DIRECTIVE) {
-            val qualifiedName = (node.psi as KtPackageDirective).qualifiedName
-            if (qualifiedName.isEmpty()) {
-                return
-            }
-            // https://github.com/shyiko/ktlint/issues/280
+  override fun visit(
+    node: ASTNode,
+    autoCorrect: Boolean,
+    emit: (offset: Int, errorMessage: String, canBeAutoCorrected: Boolean) -> Unit
+  ) {
+    if (node.elementType == PACKAGE_DIRECTIVE) {
+      val qualifiedName = (node.psi as KtPackageDirective).qualifiedName
+      if (qualifiedName.isEmpty()) {
+        return
+      }
+      // https://github.com/shyiko/ktlint/issues/280
 /*
             val filePath = node.psi.containingFile.node.getUserData(KtLint.FILE_PATH_USER_DATA_KEY) ?: return
             val fileDir = filePath.substringBeforeLast(File.separatorChar)
@@ -30,10 +30,10 @@ class PackageNameRule : Rule("package-name") {
                 emit(node.startOffset, "Package directive doesn't match file location", false)
             }
 */
-            if (qualifiedName.contains('_')) {
-                emit(node.startOffset, "Package name must not contain underscore", false)
-                // "package name must be in lowercase" is violated by too many to projects in the wild to forbid
-            }
-        }
+      if (qualifiedName.contains('_')) {
+        emit(node.startOffset, "Package name must not contain underscore", false)
+        // "package name must be in lowercase" is violated by too many to projects in the wild to forbid
+      }
     }
+  }
 }

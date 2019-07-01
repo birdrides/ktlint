@@ -10,32 +10,32 @@ import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
 
 class CommentSpacingRule : Rule("comment-spacing") {
 
-    override fun visit(
-        node: ASTNode,
-        autoCorrect: Boolean,
-        emit: (offset: Int, errorMessage: String, canBeAutoCorrected: Boolean) -> Unit
-    ) {
-        if (node is PsiComment && node is LeafPsiElement && node.getText().startsWith("//")) {
-            val prevLeaf = node.prevLeaf()
-            if (prevLeaf !is PsiWhiteSpace && prevLeaf is LeafPsiElement) {
-                emit(node.startOffset, "Missing space before //", true)
-                if (autoCorrect) {
-                    node.upsertWhitespaceBeforeMe(" ")
-                }
-            }
-            val text = node.getText()
-            if (text.length != 2 &&
-                !text.startsWith("// ") &&
-                !text.startsWith("//noinspection") &&
-                !text.startsWith("//region") &&
-                !text.startsWith("//endregion") &&
-                !text.startsWith("//language=")
-            ) {
-                emit(node.startOffset, "Missing space after //", true)
-                if (autoCorrect) {
-                    node.rawReplaceWithText("// " + text.removePrefix("//"))
-                }
-            }
+  override fun visit(
+    node: ASTNode,
+    autoCorrect: Boolean,
+    emit: (offset: Int, errorMessage: String, canBeAutoCorrected: Boolean) -> Unit
+  ) {
+    if (node is PsiComment && node is LeafPsiElement && node.getText().startsWith("//")) {
+      val prevLeaf = node.prevLeaf()
+      if (prevLeaf !is PsiWhiteSpace && prevLeaf is LeafPsiElement) {
+        emit(node.startOffset, "Missing space before //", true)
+        if (autoCorrect) {
+          node.upsertWhitespaceBeforeMe(" ")
         }
+      }
+      val text = node.getText()
+      if (text.length != 2 &&
+          !text.startsWith("// ") &&
+          !text.startsWith("//noinspection") &&
+          !text.startsWith("//region") &&
+          !text.startsWith("//endregion") &&
+          !text.startsWith("//language=")
+      ) {
+        emit(node.startOffset, "Missing space after //", true)
+        if (autoCorrect) {
+          node.rawReplaceWithText("// " + text.removePrefix("//"))
+        }
+      }
     }
+  }
 }

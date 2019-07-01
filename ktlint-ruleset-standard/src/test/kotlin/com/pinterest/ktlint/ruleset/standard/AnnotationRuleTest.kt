@@ -8,65 +8,65 @@ import org.junit.Test
 
 class AnnotationRuleTest {
 
-    @Test
-    fun `lint single annotation may be placed on line before annotated construct`() {
-        assertThat(
-            AnnotationRule().lint(
-                """
+  @Test
+  fun `lint single annotation may be placed on line before annotated construct`() {
+    assertThat(
+      AnnotationRule().lint(
+        """
                 @FunctionalInterface class A {
                     @JvmField
                     var x: String
                 }
                 """.trimIndent()
-            )
-        ).isEmpty()
-    }
+      )
+    ).isEmpty()
+  }
 
-    @Test
-    fun `format single annotation may be placed on line before annotated construct`() {
-        val code =
-            """
+  @Test
+  fun `format single annotation may be placed on line before annotated construct`() {
+    val code =
+      """
             @FunctionalInterface class A {
                 @JvmField
                 var x: String
             }
             """.trimIndent()
-        assertThat(AnnotationRule().format(code)).isEqualTo(code)
-    }
+    assertThat(AnnotationRule().format(code)).isEqualTo(code)
+  }
 
-    @Test
-    fun `lint single annotation may be placed on same line as annotated construct`() {
-        assertThat(
-            AnnotationRule().lint(
-                """
+  @Test
+  fun `lint single annotation may be placed on same line as annotated construct`() {
+    assertThat(
+      AnnotationRule().lint(
+        """
                 @FunctionalInterface class A {
                     @JvmField var x: String
 
                     @Test fun myTest() {}
                 }
                 """.trimIndent()
-            )
-        ).isEmpty()
-    }
+      )
+    ).isEmpty()
+  }
 
-    @Test
-    fun `format single annotation may be placed on same line as annotated construct`() {
-        val code =
-            """
+  @Test
+  fun `format single annotation may be placed on same line as annotated construct`() {
+    val code =
+      """
             @FunctionalInterface class A {
                 @JvmField var x: String
 
                 @Test fun myTest() {}
             }
             """.trimIndent()
-        assertThat(AnnotationRule().format(code)).isEqualTo(code)
-    }
+    assertThat(AnnotationRule().format(code)).isEqualTo(code)
+  }
 
-    @Test
-    fun `lint multiple annotations should not be placed on same line as annotated construct`() {
-        assertThat(
-            AnnotationRule().lint(
-                """
+  @Test
+  fun `lint multiple annotations should not be placed on same line as annotated construct`() {
+    assertThat(
+      AnnotationRule().lint(
+        """
                 class A {
                     @JvmField @Volatile var x: String
 
@@ -74,20 +74,20 @@ class AnnotationRuleTest {
                     var y: String
                 }
                 """.trimIndent()
-            )
-        ).containsExactly(
-            LintError(
-                2, 5, "annotation",
-                AnnotationRule.multipleAnnotationsOnSameLineAsAnnotatedConstructErrorMessage
-            )
-        )
-    }
+      )
+    ).containsExactly(
+      LintError(
+        2, 5, "annotation",
+        AnnotationRule.multipleAnnotationsOnSameLineAsAnnotatedConstructErrorMessage
+      )
+    )
+  }
 
-    @Test
-    fun `format multiple annotations should not be placed on same line as annotated construct`() {
-        assertThat(
-            AnnotationRule().format(
-                """
+  @Test
+  fun `format multiple annotations should not be placed on same line as annotated construct`() {
+    assertThat(
+      AnnotationRule().format(
+        """
                 class A {
                     @JvmField @Volatile var x: String
 
@@ -95,9 +95,9 @@ class AnnotationRuleTest {
                     var y: String
                 }
                 """.trimIndent()
-            )
-        ).isEqualTo(
-            """
+      )
+    ).isEqualTo(
+      """
             class A {
                 @JvmField @Volatile
                 var x: String
@@ -106,43 +106,43 @@ class AnnotationRuleTest {
                 var y: String
             }
             """.trimIndent()
-        )
-    }
+    )
+  }
 
-    @Test
-    fun `format multiple annotations should not be placed on same line as annotated construct (with no previous whitespace)`() {
-        assertThat(AnnotationRule().format("@JvmField @Volatile var x: String"))
-            .isEqualTo(
-                """
+  @Test
+  fun `format multiple annotations should not be placed on same line as annotated construct (with no previous whitespace)`() {
+    assertThat(AnnotationRule().format("@JvmField @Volatile var x: String"))
+      .isEqualTo(
+        """
                 @JvmField @Volatile
                 var x: String
                 """.trimIndent()
-            )
-    }
+      )
+  }
 
-    @Test
-    fun `format multiple annotations should not be placed on same line as annotated construct (with no previous indent)`() {
-        assertThat(
-            AnnotationRule().format(
-                """
+  @Test
+  fun `format multiple annotations should not be placed on same line as annotated construct (with no previous indent)`() {
+    assertThat(
+      AnnotationRule().format(
+        """
 
                 @JvmField @Volatile var x: String
                 """.trimIndent()
-            )
-        ).isEqualTo(
-            """
+      )
+    ).isEqualTo(
+      """
 
             @JvmField @Volatile
             var x: String
             """.trimIndent()
-        )
-    }
+    )
+  }
 
-    @Test
-    fun `lint annotations with params should not be placed on same line before annotated construct`() {
-        assertThat(
-            AnnotationRule().lint(
-                """
+  @Test
+  fun `lint annotations with params should not be placed on same line before annotated construct`() {
+    assertThat(
+      AnnotationRule().lint(
+        """
                 class A {
                     @JvmName("xJava") var x: String
 
@@ -150,20 +150,20 @@ class AnnotationRuleTest {
                     var y: String
                 }
                 """.trimIndent()
-            )
-        ).containsExactly(
-            LintError(
-                2, 5, "annotation",
-                AnnotationRule.annotationsWithParametersAreNotOnSeparateLinesErrorMessage
-            )
-        )
-    }
+      )
+    ).containsExactly(
+      LintError(
+        2, 5, "annotation",
+        AnnotationRule.annotationsWithParametersAreNotOnSeparateLinesErrorMessage
+      )
+    )
+  }
 
-    @Test
-    fun `format annotations with params should not be placed on same line before annotated construct`() {
-        assertThat(
-            AnnotationRule().format(
-                """
+  @Test
+  fun `format annotations with params should not be placed on same line before annotated construct`() {
+    assertThat(
+      AnnotationRule().format(
+        """
                 class A {
                     @JvmName("xJava") var x: String
 
@@ -171,9 +171,9 @@ class AnnotationRuleTest {
                     var y: String
                 }
                 """.trimIndent()
-            )
-        ).isEqualTo(
-            """
+      )
+    ).isEqualTo(
+      """
             class A {
                 @JvmName("xJava")
                 var x: String
@@ -182,47 +182,47 @@ class AnnotationRuleTest {
                 var y: String
             }
             """.trimIndent()
-        )
-    }
+    )
+  }
 
-    @Test
-    fun `lint multiple annotations with params should not be placed on same line before annotated construct`() {
-        assertThat(
-            AnnotationRule().lint(
-                """
+  @Test
+  fun `lint multiple annotations with params should not be placed on same line before annotated construct`() {
+    assertThat(
+      AnnotationRule().lint(
+        """
                 @Retention(SOURCE) @Target(FUNCTION, PROPERTY_SETTER, FIELD) annotation class A
 
                 @Retention(SOURCE)
                 @Target(FUNCTION, PROPERTY_SETTER, FIELD)
                 annotation class B
                 """.trimIndent()
-            )
-        ).containsExactly(
-            LintError(
-                1, 1, "annotation",
-                AnnotationRule.multipleAnnotationsOnSameLineAsAnnotatedConstructErrorMessage
-            ),
-            LintError(
-                1, 1, "annotation",
-                AnnotationRule.annotationsWithParametersAreNotOnSeparateLinesErrorMessage
-            )
-        )
-    }
+      )
+    ).containsExactly(
+      LintError(
+        1, 1, "annotation",
+        AnnotationRule.multipleAnnotationsOnSameLineAsAnnotatedConstructErrorMessage
+      ),
+      LintError(
+        1, 1, "annotation",
+        AnnotationRule.annotationsWithParametersAreNotOnSeparateLinesErrorMessage
+      )
+    )
+  }
 
-    @Test
-    fun `format multiple annotations with params should not be placed on same line before annotated construct`() {
-        assertThat(
-            AnnotationRule().format(
-                """
+  @Test
+  fun `format multiple annotations with params should not be placed on same line before annotated construct`() {
+    assertThat(
+      AnnotationRule().format(
+        """
                 @Retention(SOURCE) @Target(FUNCTION, PROPERTY_SETTER, FIELD) annotation class A
 
                 @Retention(SOURCE)
                 @Target(FUNCTION, PROPERTY_SETTER, FIELD)
                 annotation class B
                 """.trimIndent()
-            )
-        ).isEqualTo(
-            """
+      )
+    ).isEqualTo(
+      """
             @Retention(SOURCE)
             @Target(FUNCTION, PROPERTY_SETTER, FIELD)
             annotation class A
@@ -231,38 +231,38 @@ class AnnotationRuleTest {
             @Target(FUNCTION, PROPERTY_SETTER, FIELD)
             annotation class B
             """.trimIndent()
-        )
-    }
+    )
+  }
 
-    @Test
-    fun `lint annotation after keyword`() {
-        assertThat(
-            AnnotationRule().lint(
-                """
+  @Test
+  fun `lint annotation after keyword`() {
+    assertThat(
+      AnnotationRule().lint(
+        """
                 class A {
                     private @Test fun myTest() {}
                 }
                 """.trimIndent()
-            )
-        ).isEmpty()
-    }
+      )
+    ).isEmpty()
+  }
 
-    @Test
-    fun `format annotation after keyword`() {
-        val code =
-            """
+  @Test
+  fun `format annotation after keyword`() {
+    val code =
+      """
             class A {
                 private @Test fun myTest() {}
             }
             """.trimIndent()
-        assertThat(AnnotationRule().format(code)).isEqualTo(code)
-    }
+    assertThat(AnnotationRule().format(code)).isEqualTo(code)
+  }
 
-    @Test
-    fun `lint multi-line annotation`() {
-        assertThat(
-            AnnotationRule().lint(
-                """
+  @Test
+  fun `lint multi-line annotation`() {
+    assertThat(
+      AnnotationRule().lint(
+        """
                 class A {
                     @JvmField @Volatile @Annotation(
                         enabled = true,
@@ -274,23 +274,23 @@ class AnnotationRuleTest {
                     ) val a: Any
                 }
                 """.trimIndent()
-            )
-        ).containsExactly(
-            LintError(
-                2, 5, "annotation",
-                AnnotationRule.multipleAnnotationsOnSameLineAsAnnotatedConstructErrorMessage
-            ),
-            LintError(
-                2, 5, "annotation",
-                AnnotationRule.annotationsWithParametersAreNotOnSeparateLinesErrorMessage
-            )
-        )
-    }
+      )
+    ).containsExactly(
+      LintError(
+        2, 5, "annotation",
+        AnnotationRule.multipleAnnotationsOnSameLineAsAnnotatedConstructErrorMessage
+      ),
+      LintError(
+        2, 5, "annotation",
+        AnnotationRule.annotationsWithParametersAreNotOnSeparateLinesErrorMessage
+      )
+    )
+  }
 
-    @Test
-    fun `format multi-line annotation`() {
-        val code =
-            """
+  @Test
+  fun `format multi-line annotation`() {
+    val code =
+      """
             class A {
                 @JvmField @Volatile @Annotation(
                     enabled = true,
@@ -302,8 +302,8 @@ class AnnotationRuleTest {
                 ) val a: Any
             }
             """.trimIndent()
-        assertThat(AnnotationRule().format(code)).isEqualTo(
-            """
+    assertThat(AnnotationRule().format(code)).isEqualTo(
+      """
             class A {
                 @JvmField
                 @Volatile
@@ -318,24 +318,24 @@ class AnnotationRuleTest {
                 val a: Any
             }
             """.trimIndent()
-        )
-    }
+    )
+  }
 
-    @Test
-    fun `no annotation present for data class passes`() {
-        val code =
-            """
+  @Test
+  fun `no annotation present for data class passes`() {
+    val code =
+      """
             package com.example.application.a.b
 
             data class FileModel(val uri: String, val name: String)
             """.trimIndent()
-        assertThat(AnnotationRule().format(code)).isEqualTo(code)
-    }
+    assertThat(AnnotationRule().format(code)).isEqualTo(code)
+  }
 
-    @Test
-    fun `no annotation present succeeds for class`() {
-        val code =
-            """
+  @Test
+  fun `no annotation present succeeds for class`() {
+    val code =
+      """
             package com.example.application.a
 
             import android.os.Environment
@@ -344,6 +344,6 @@ class AnnotationRuleTest {
                 fun gallery(): String = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).path
             }
             """.trimIndent()
-        assertThat(AnnotationRule().format(code)).isEqualTo(code)
-    }
+    assertThat(AnnotationRule().format(code)).isEqualTo(code)
+  }
 }

@@ -9,6 +9,6 @@ import java.io.PrintStream
  * (see `ktlint-reporter-plain/src/main/resources` for an example).
  */
 interface ReporterProvider {
-    val id: String
-    fun get(out: PrintStream, opt: Map<String, String>): Reporter
+  val id: String
+  fun get(out: PrintStream, opt: Map<String, String>): Reporter
 }

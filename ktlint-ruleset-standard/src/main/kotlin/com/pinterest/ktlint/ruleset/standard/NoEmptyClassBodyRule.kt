@@ -12,28 +12,28 @@ import org.jetbrains.kotlin.psi.KtObjectLiteralExpression
 
 class NoEmptyClassBodyRule : Rule("no-empty-class-body") {
 
-    override fun visit(
-        node: ASTNode,
-        autoCorrect: Boolean,
-        emit: (offset: Int, errorMessage: String, canBeAutoCorrected: Boolean) -> Unit
+  override fun visit(
+    node: ASTNode,
+    autoCorrect: Boolean,
+    emit: (offset: Int, errorMessage: String, canBeAutoCorrected: Boolean) -> Unit
+  ) {
+    if (node.elementType == CLASS_BODY &&
+        node.firstChildNode?.let { n ->
+          n.elementType == LBRACE &&
+          n.nextLeaf { it.elementType != WHITE_SPACE }?.elementType == RBRACE
+        } == true &&
+        !node.isPartOf(KtObjectLiteralExpression::class)
     ) {
-        if (node.elementType == CLASS_BODY &&
-            node.firstChildNode?.let { n ->
-                n.elementType == LBRACE &&
-                    n.nextLeaf { it.elementType != WHITE_SPACE }?.elementType == RBRACE
-            } == true &&
-            !node.isPartOf(KtObjectLiteralExpression::class)
-        ) {
-            emit(node.startOffset, "Unnecessary block (\"{}\")", true)
-            if (autoCorrect) {
-                val prevNode = node.treePrev
-                if (prevNode.elementType == WHITE_SPACE) {
-                    // remove space between declaration and block
-                    prevNode.treeParent.removeChild(prevNode)
-                }
-                // remove block
-                node.treeParent.removeChild(node)
-            }
+      emit(node.startOffset, "Unnecessary block (\"{}\")", true)
+      if (autoCorrect) {
+        val prevNode = node.treePrev
+        if (prevNode.elementType == WHITE_SPACE) {
+          // remove space between declaration and block
+          prevNode.treeParent.removeChild(prevNode)
         }
+        // remove block
+        node.treeParent.removeChild(node)
+      }
     }
+  }
 }

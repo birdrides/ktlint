@@ -8,9 +8,9 @@ package com.pinterest.ktlint.core
  */
 interface RuleSetProvider {
 
-    /**
-     * This method is going to be called once for each file (which means if any of the rules have state or
-     * are not thread-safe - a new RuleSet must be created).
-     */
-    fun get(): RuleSet
+  /**
+   * This method is going to be called once for each file (which means if any of the rules have state or
+   * are not thread-safe - a new RuleSet must be created).
+   */
+  fun get(): RuleSet
 }

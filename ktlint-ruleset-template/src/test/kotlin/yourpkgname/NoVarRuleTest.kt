@@ -9,19 +9,19 @@ import org.jetbrains.spek.api.dsl.it
 
 class NoVarRuleTest : Spek({
 
-    describe("no-var rule") {
+  describe("no-var rule") {
 
-        // whenever KTLINT_DEBUG env variable is set to "ast" or -DktlintDebug=ast is used
-        // com.pinterest.ktlint.test.(lint|format) will print AST (along with other debug info) to the stderr.
-        // this can be extremely helpful while writing and testing rules.
-        // uncomment the line below to take a quick look at it
-        // System.setProperty("ktlintDebug", "ast")
+    // whenever KTLINT_DEBUG env variable is set to "ast" or -DktlintDebug=ast is used
+    // com.pinterest.ktlint.test.(lint|format) will print AST (along with other debug info) to the stderr.
+    // this can be extremely helpful while writing and testing rules.
+    // uncomment the line below to take a quick look at it
+    // System.setProperty("ktlintDebug", "ast")
 
-        val rule = NoVarRule()
+    val rule = NoVarRule()
 
-        it("should prohibit usage of var") {
-            assertThat(rule.lint("""fun fn() { var v = "var" }"""))
-                .isEqualTo(listOf(LintError(1, 12, "no-var", "Unexpected var, use val instead")))
-        }
+    it("should prohibit usage of var") {
+      assertThat(rule.lint("""fun fn() { var v = "var" }"""))
+        .isEqualTo(listOf(LintError(1, 12, "no-var", "Unexpected var, use val instead")))
     }
+  }
 })

@@ -7,18 +7,18 @@ import org.junit.Test
 
 class SpacingAroundOperatorsRuleTest {
 
-    @Test
-    fun testLint() {
-        assertThat(SpacingAroundOperatorsRule().diffFileLint("spec/op-spacing/lint.kt.spec")).isEmpty()
-    }
+  @Test
+  fun testLint() {
+    assertThat(SpacingAroundOperatorsRule().diffFileLint("spec/op-spacing/lint.kt.spec")).isEmpty()
+  }
 
-    @Test
-    fun testFormat() {
-        assertThat(
-            SpacingAroundOperatorsRule().diffFileFormat(
-                "spec/op-spacing/format.kt.spec",
-                "spec/op-spacing/format-expected.kt.spec"
-            )
-        ).isEmpty()
-    }
+  @Test
+  fun testFormat() {
+    assertThat(
+      SpacingAroundOperatorsRule().diffFileFormat(
+        "spec/op-spacing/format.kt.spec",
+        "spec/op-spacing/format-expected.kt.spec"
+      )
+    ).isEmpty()
+  }
 }

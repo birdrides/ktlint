@@ -28,101 +28,101 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
 
 class SpacingAroundCurlyRule : Rule("curly-spacing") {
 
-    override fun visit(
-        node: ASTNode,
-        autoCorrect: Boolean,
-        emit: (offset: Int, errorMessage: String, canBeAutoCorrected: Boolean) -> Unit
-    ) {
-        if (node is LeafPsiElement && !node.isPartOfString()) {
-            val prevLeaf = node.prevLeaf()
-            val nextLeaf = node.nextLeaf()
-            val spacingBefore: Boolean
-            val spacingAfter: Boolean
-            if (node.textMatches("{")) {
-                spacingBefore =
-                    prevLeaf is PsiWhiteSpace ||
-                    prevLeaf?.elementType == AT ||
-                    (
-                        prevLeaf?.elementType == LPAR &&
-                            (node.parent is KtLambdaExpression || node.parent.parent is KtLambdaExpression)
-                        )
-                spacingAfter = nextLeaf is PsiWhiteSpace || nextLeaf?.elementType == RBRACE
-                if (prevLeaf is PsiWhiteSpace &&
-                    !prevLeaf.textContains('\n') &&
-                    prevLeaf.prevLeaf()?.let {
-                        it.elementType == LPAR || it.elementType == AT
-                    } == true
-                ) {
-                    emit(node.startOffset, "Unexpected space before \"${node.text}\"", true)
-                    if (autoCorrect) {
-                        prevLeaf.node.treeParent.removeChild(prevLeaf.node)
-                    }
-                }
-                if (prevLeaf is PsiWhiteSpace &&
-                    prevLeaf.textContains('\n') &&
-                    (
-                        prevLeaf.prevLeaf()?.let {
-                            it.elementType == RPAR || KtTokens.KEYWORDS.contains(it.elementType)
-                        } == true ||
-                            node.treeParent.elementType == CLASS_BODY ||
-                            prevLeaf.treeParent.elementType == FUN
-                        )
-                ) {
-                    emit(node.startOffset, "Unexpected newline before \"${node.text}\"", true)
-                    if (autoCorrect) {
-                        (prevLeaf as LeafPsiElement).rawReplaceWithText(" ")
-                    }
-                }
-            } else if (node.textMatches("}")) {
-                spacingBefore = prevLeaf is PsiWhiteSpace || prevLeaf?.elementType == LBRACE
-                spacingAfter = nextLeaf == null || nextLeaf is PsiWhiteSpace || shouldNotToBeSeparatedBySpace(nextLeaf)
-                if (nextLeaf is PsiWhiteSpace && !nextLeaf.textContains('\n') &&
-                    shouldNotToBeSeparatedBySpace(nextLeaf.nextLeaf())
-                ) {
-                    emit(node.startOffset, "Unexpected space after \"${node.text}\"", true)
-                    if (autoCorrect) {
-                        nextLeaf.node.treeParent.removeChild(nextLeaf.node)
-                    }
-                }
-            } else {
-                return
-            }
-            when {
-                !spacingBefore && !spacingAfter -> {
-                    emit(node.startOffset, "Missing spacing around \"${node.text}\"", true)
-                    if (autoCorrect) {
-                        node.upsertWhitespaceBeforeMe(" ")
-                        node.upsertWhitespaceAfterMe(" ")
-                    }
-                }
-                !spacingBefore -> {
-                    emit(node.startOffset, "Missing spacing before \"${node.text}\"", true)
-                    if (autoCorrect) {
-                        node.upsertWhitespaceBeforeMe(" ")
-                    }
-                }
-                !spacingAfter -> {
-                    emit(node.startOffset + 1, "Missing spacing after \"${node.text}\"", true)
-                    if (autoCorrect) {
-                        node.upsertWhitespaceAfterMe(" ")
-                    }
-                }
-            }
+  override fun visit(
+    node: ASTNode,
+    autoCorrect: Boolean,
+    emit: (offset: Int, errorMessage: String, canBeAutoCorrected: Boolean) -> Unit
+  ) {
+    if (node is LeafPsiElement && !node.isPartOfString()) {
+      val prevLeaf = node.prevLeaf()
+      val nextLeaf = node.nextLeaf()
+      val spacingBefore: Boolean
+      val spacingAfter: Boolean
+      if (node.textMatches("{")) {
+        spacingBefore =
+          prevLeaf is PsiWhiteSpace ||
+          prevLeaf?.elementType == AT ||
+          (
+            prevLeaf?.elementType == LPAR &&
+            (node.parent is KtLambdaExpression || node.parent.parent is KtLambdaExpression)
+          )
+        spacingAfter = nextLeaf is PsiWhiteSpace || nextLeaf?.elementType == RBRACE
+        if (prevLeaf is PsiWhiteSpace &&
+            !prevLeaf.textContains('\n') &&
+            prevLeaf.prevLeaf()?.let {
+              it.elementType == LPAR || it.elementType == AT
+            } == true
+        ) {
+          emit(node.startOffset, "Unexpected space before \"${node.text}\"", true)
+          if (autoCorrect) {
+            prevLeaf.node.treeParent.removeChild(prevLeaf.node)
+          }
         }
-    }
-
-    fun shouldNotToBeSeparatedBySpace(leaf: ASTNode?): Boolean {
-        val nextElementType = leaf?.elementType
-        return (
-            nextElementType == DOT ||
-                nextElementType == COMMA ||
-                nextElementType == RPAR ||
-                nextElementType == SEMICOLON ||
-                nextElementType == SAFE_ACCESS ||
-                nextElementType == EXCLEXCL ||
-                nextElementType == LBRACKET ||
-                nextElementType == LPAR ||
-                nextElementType == COLONCOLON
+        if (prevLeaf is PsiWhiteSpace &&
+            prevLeaf.textContains('\n') &&
+            (
+              prevLeaf.prevLeaf()?.let {
+                it.elementType == RPAR || KtTokens.KEYWORDS.contains(it.elementType)
+              } == true ||
+              node.treeParent.elementType == CLASS_BODY ||
+              prevLeaf.treeParent.elementType == FUN
             )
+        ) {
+          emit(node.startOffset, "Unexpected newline before \"${node.text}\"", true)
+          if (autoCorrect) {
+            (prevLeaf as LeafPsiElement).rawReplaceWithText(" ")
+          }
+        }
+      } else if (node.textMatches("}")) {
+        spacingBefore = prevLeaf is PsiWhiteSpace || prevLeaf?.elementType == LBRACE
+        spacingAfter = nextLeaf == null || nextLeaf is PsiWhiteSpace || shouldNotToBeSeparatedBySpace(nextLeaf)
+        if (nextLeaf is PsiWhiteSpace && !nextLeaf.textContains('\n') &&
+            shouldNotToBeSeparatedBySpace(nextLeaf.nextLeaf())
+        ) {
+          emit(node.startOffset, "Unexpected space after \"${node.text}\"", true)
+          if (autoCorrect) {
+            nextLeaf.node.treeParent.removeChild(nextLeaf.node)
+          }
+        }
+      } else {
+        return
+      }
+      when {
+        !spacingBefore && !spacingAfter -> {
+          emit(node.startOffset, "Missing spacing around \"${node.text}\"", true)
+          if (autoCorrect) {
+            node.upsertWhitespaceBeforeMe(" ")
+            node.upsertWhitespaceAfterMe(" ")
+          }
+        }
+        !spacingBefore -> {
+          emit(node.startOffset, "Missing spacing before \"${node.text}\"", true)
+          if (autoCorrect) {
+            node.upsertWhitespaceBeforeMe(" ")
+          }
+        }
+        !spacingAfter -> {
+          emit(node.startOffset + 1, "Missing spacing after \"${node.text}\"", true)
+          if (autoCorrect) {
+            node.upsertWhitespaceAfterMe(" ")
+          }
+        }
+      }
     }
+  }
+
+  fun shouldNotToBeSeparatedBySpace(leaf: ASTNode?): Boolean {
+    val nextElementType = leaf?.elementType
+    return (
+      nextElementType == DOT ||
+      nextElementType == COMMA ||
+      nextElementType == RPAR ||
+      nextElementType == SEMICOLON ||
+      nextElementType == SAFE_ACCESS ||
+      nextElementType == EXCLEXCL ||
+      nextElementType == LBRACKET ||
+      nextElementType == LPAR ||
+      nextElementType == COLONCOLON
+           )
+  }
 }

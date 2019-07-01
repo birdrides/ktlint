@@ -14,22 +14,22 @@ import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.TreeElement
  */
 class MultiLineIfElseRule : Rule("multiline-if-else") {
 
-    override fun visit(
-        node: ASTNode,
-        autoCorrect: Boolean,
-        emit: (offset: Int, errorMessage: String, canBeAutoCorrected: Boolean) -> Unit
-    ) {
-        if (node.elementType == THEN || node.elementType == ELSE) {
-            if (!node.treePrev.textContains('\n')) { // if (...) <statement>
-                return
-            }
-            if (node.firstChildNode?.firstChildNode?.elementType != LBRACE) {
-                emit(node.firstChildNode.startOffset, "Missing { ... }", true)
-                if (autoCorrect) {
-                    (node.firstChildNode.firstChildNode as TreeElement).rawInsertBeforeMe(LeafPsiElement(RBRACE, "{"))
-                    (node.lastChildNode.lastChildNode as TreeElement).rawInsertAfterMe(LeafPsiElement(LBRACE, "}"))
-                }
-            }
+  override fun visit(
+    node: ASTNode,
+    autoCorrect: Boolean,
+    emit: (offset: Int, errorMessage: String, canBeAutoCorrected: Boolean) -> Unit
+  ) {
+    if (node.elementType == THEN || node.elementType == ELSE) {
+      if (!node.treePrev.textContains('\n')) { // if (...) <statement>
+        return
+      }
+      if (node.firstChildNode?.firstChildNode?.elementType != LBRACE) {
+        emit(node.firstChildNode.startOffset, "Missing { ... }", true)
+        if (autoCorrect) {
+          (node.firstChildNode.firstChildNode as TreeElement).rawInsertBeforeMe(LeafPsiElement(RBRACE, "{"))
+          (node.lastChildNode.lastChildNode as TreeElement).rawInsertAfterMe(LeafPsiElement(LBRACE, "}"))
         }
+      }
     }
+  }
 }

@@ -7,18 +7,18 @@ import org.junit.Test
 
 class SpacingAroundParensRuleTest {
 
-    @Test
-    fun testLint() {
-        assertThat(SpacingAroundParensRule().diffFileLint("spec/paren-spacing/lint.kt.spec")).isEmpty()
-    }
+  @Test
+  fun testLint() {
+    assertThat(SpacingAroundParensRule().diffFileLint("spec/paren-spacing/lint.kt.spec")).isEmpty()
+  }
 
-    @Test
-    fun testFormat() {
-        assertThat(
-            SpacingAroundParensRule().diffFileFormat(
-                "spec/paren-spacing/format.kt.spec",
-                "spec/paren-spacing/format-expected.kt.spec"
-            )
-        ).isEmpty()
-    }
+  @Test
+  fun testFormat() {
+    assertThat(
+      SpacingAroundParensRule().diffFileFormat(
+        "spec/paren-spacing/format.kt.spec",
+        "spec/paren-spacing/format-expected.kt.spec"
+      )
+    ).isEmpty()
+  }
 }

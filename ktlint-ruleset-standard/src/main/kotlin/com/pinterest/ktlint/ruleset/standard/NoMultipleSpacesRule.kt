@@ -7,16 +7,16 @@ import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
 
 class NoMultipleSpacesRule : Rule("no-multi-spaces") {
 
-    override fun visit(
-        node: ASTNode,
-        autoCorrect: Boolean,
-        emit: (offset: Int, errorMessage: String, canBeAutoCorrected: Boolean) -> Unit
-    ) {
-        if (node is PsiWhiteSpace && !node.textContains('\n') && node.getTextLength() > 1) {
-            emit(node.startOffset + 1, "Unnecessary space(s)", true)
-            if (autoCorrect) {
-                (node as LeafPsiElement).rawReplaceWithText(" ")
-            }
-        }
+  override fun visit(
+    node: ASTNode,
+    autoCorrect: Boolean,
+    emit: (offset: Int, errorMessage: String, canBeAutoCorrected: Boolean) -> Unit
+  ) {
+    if (node is PsiWhiteSpace && !node.textContains('\n') && node.getTextLength() > 1) {
+      emit(node.startOffset + 1, "Unnecessary space(s)", true)
+      if (autoCorrect) {
+        (node as LeafPsiElement).rawReplaceWithText(" ")
+      }
     }
+  }
 }
